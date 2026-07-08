@@ -1,14 +1,3 @@
-
-check inside wsl:
-sudo apt update
-sudo apt install -y usbutils v4l-utils
-lsusb
-ls -l /dev/video*
-
-v4l2-ctl --list-devices
-
-/dev/video0
-
 ### WSL2 Webcam Passthrough Setup (Troubleshooting Guide)
 The original tutorial this project is based on assumes the webcam is directly available to OpenCV (cv2.VideoCapture(0)), which is true on native Windows or native Linux. This project instead runs inside WSL2, which by default has no access to USB devices such as webcams. There is nothing to fix in Python or OpenCV here, the device simply isn't visible to the Linux side at all until it's explicitly passed through from Windows.
 

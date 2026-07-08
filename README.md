@@ -46,6 +46,8 @@ The project was developed and tested with the following environment:
 
 The project can also run on the CPU, although training and inference may be slower.
 
+-> add the env : wsl + gpu details
+
 Known issues:
 
 - Some environments display a NUMA-support warning when TensorFlow initializes the GPU. This warning is harmless as long as `tf.config.list_physical_devices("GPU")` returns a GPU and training runs successfully.
@@ -76,14 +78,14 @@ On a native Windows or Linux installation this works without any extra setup. Un
 
 ## 4. Installation <a name="installation"></a>
 
-### Clone the repository
+### 4.1 Clone the repository
 
 ```bash
 git clone <repository-url>
 cd facial-recognition-system
 ```
 
-###  Create the environment from `environment.yml`
+###  4.2 Create the environment from `environment.yml`
 The recommended way to install the project is with Conda using the provided `environment.yml` file. This creates an environment with the required Python, TensorFlow, CUDA, cuDNN, OpenCV, Matplotlib, and Jupyter versions.
 
 ```bash
@@ -93,7 +95,7 @@ conda activate facial-recognition
 
 [MANUAL_INSTALLATION.md](MANUAL_INSTALLATION.md): Use this method only when the environment file cannot be used. 
 
-### Register the Jupyter kernel
+### 4.3 Register the Jupyter kernel
 
 ```bash
 python -m ipykernel install --user \
@@ -101,13 +103,13 @@ python -m ipykernel install --user \
   --display-name "Python 3.7 - Facial Recognition"
 ```
 
-### Run the project
+### 4.4 Run the project
 
 ```bash
 conda activate facial-recognition
 ```
 
-### Start Jupyter Notebook
+### 4.5 Start Jupyter Notebook
 
 ```bash
 jupyter notebook
@@ -120,18 +122,18 @@ This implementation is adapted from the facial recognition tutorial by **Nichola
 
 The original tutorial structure and core implementation ideas include:
 
-- collecting anchor and positive images with OpenCV;
-- using LFW images as negative examples;
-- creating image pairs with TensorFlow datasets;
-- building a shared embedding network;
-- implementing a custom L1 distance layer;
-- training a Siamese network;
-- evaluating precision and recall;
-- performing real-time verification.
+- collecting anchor and positive images with OpenCV
+- using LFW images as negative examples
+- creating image pairs with TensorFlow datasets
+- building a shared embedding network
+- implementing a custom L1 distance layer
+- training a Siamese network
+- evaluating precision and recall
+- performing real-time verification
 
 My modifications include:
 
-- adapting the environment for WSL2: WSL_WEBCAM_SETUP.md
+- adapting the environment for WSL2: `WSL_WEBCAM_SETUP.md`
 - creating a reproducible Conda environment
 - documenting Python, TensorFlow, CUDA, and cuDNN compatibility
 - adding environment verification (debugging cells within the notebook)
