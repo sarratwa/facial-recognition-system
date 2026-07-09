@@ -1,5 +1,3 @@
-
-
 ### Manual installation
 Use this method only when the environment file cannot be used.
 #### Create the Conda environment

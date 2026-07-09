@@ -46,7 +46,9 @@ The project was developed and tested with the following environment:
 
 The project can also run on the CPU, although training and inference may be slower.
 
---todo: Add notes on any machine-specific quirks encountered
+Known issues:
+
+- Some environments display a NUMA-support warning when TensorFlow initializes the GPU. This warning is harmless as long as `tf.config.list_physical_devices("GPU")` returns a GPU and training runs successfully.
 
 ## 3. Data <a name="data"></a>
 
@@ -59,8 +61,6 @@ The project uses three image categories:
 > [!IMPORTANT]
 > The notebook resizes images to `100 × 100` pixels and scales pixel values to the range `[0, 1]`.
 
-Acquiring the negative data was a standard dataset download (Section 3.1). Acquiring the anchor/positive data via webcam was not straightforward, because this project runs inside WSL2, which does not expose USB devices such as webcams to Linux by default. Getting webcam capture working under WSL2 is one of the adaptations this project makes to the original tutorial (see Acknowledgement); the full debugging process is written up separately in [WSL_WEBCAM_SETUP.md](WSL_WEBCAM_SETUP.md) so it doesn't clutter this README, and can be skipped entirely by anyone not running under WSL2.
-
 ### 3.1 Negative Images: Labeled Faces in the Wild (LFW)
 
 1. Go to Kaggle and log in to your account, or create a new account.
@@ -70,7 +70,7 @@ Acquiring the negative data was a standard dataset download (Section 3.1). Acqui
 
 ### 3.2 Anchor & Positive Images: Webcam Capture
 
-Anchor and positive images are captured live from the notebook using OpenCV (cv2.VideoCapture), with a key-press workflow (a = save anchor frame, p = save positive frame, q = quit).
+Anchor and positive images are captured live from the notebook using `OpenCV (cv2.VideoCapture)`, with a key-press workflow (a = save anchor frame, p = save positive frame, q = quit).
 
 On a native Windows or Linux installation this works without any extra setup. Under WSL2, cv2.VideoCapture cannot see the webcam at all until the device is explicitly passed through from Windows and the correct kernel driver is loaded. If you hit this problem, see [WSL_WEBCAM_SETUP.md](WSL_WEBCAM_SETUP.md) for the full passthrough setup, including the two issues encountered while building this project (missing /dev/video* devices, and device permissions that reset on every WSL restart) and how they were resolved.
 
@@ -91,7 +91,7 @@ conda env create -f environment.yml
 conda activate facial-recognition
 ```
 
-Manual installation see [MANUAL_INSTALLATION.md](MANUAL_INSTALLATION.md)
+[MANUAL_INSTALLATION.md](MANUAL_INSTALLATION.md): Use this method only when the environment file cannot be used. 
 
 ### Register the Jupyter kernel
 
@@ -133,12 +133,9 @@ My modifications include:
 
 - adapting the environment for WSL2: WSL_WEBCAM_SETUP.md
 - creating a reproducible Conda environment
-- documenting Python, TensorFlow, CUDA, and cuDNN compatibility;
+- documenting Python, TensorFlow, CUDA, and cuDNN compatibility
 - adding environment verification (debugging cells within the notebook)
 - improving notebook organization and explanations;
-
-Known issues:
-Some environments display a NUMA-support warning when TensorFlow initializes the GPU. This warning is harmless as long as `tf.config.list_physical_devices("GPU")` returns a GPU and training runs successfully.
 
 ## 6. References <a name="references"></a>
 
