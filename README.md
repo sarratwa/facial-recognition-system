@@ -16,7 +16,7 @@ The project includes data collection, preprocessing, model construction, trainin
 
 The aim of this project is to build and evaluate a facial verification system based on a Siamese neural network.
 
-Unlike a conventional multi-class classifier, the model does not directly predict a person's identity. Instead, it receives two images and learns whether the images represent the same person.
+Unlike a conventional multi-class classifier, the model does not directly predict a person's identity. Instead, it receives two images and learns whether the images represent the same person. This is a form of one-shot learning: rather than requiring many labeled examples per class (per person), the network only needs to learn a general notion of "similarity" between two face images, so a person can be verified from very few (in principle, a single) reference image.
 
 The notebook follows this workflow:
 
@@ -45,6 +45,8 @@ The project was developed and tested with the following environment:
 - cuDNN 8.0
 
 The project can also run on the CPU, although training and inference may be slower.
+
+--todo: Add notes on any machine-specific quirks encountered
 
 ## 3. Data <a name="data"></a>
 
@@ -138,6 +140,9 @@ My modifications include:
 - adding environment verification;
 - improving notebook organization and explanations;
 - TODO: list all further code, evaluation, robustness, and visualization changes.
+
+problems: 
+- Note: Some environments may display a NUMA-support warning when TensorFlow initializes the GPU. This warning is harmless when tf.config.list_physical_devices("GPU") returns a GPU and training runs successfully.
 
 ## 6. References <a name="references"></a>
 
