@@ -142,6 +142,9 @@ My modifications include:
 ## 6. References <a name="references"></a>
 
 ```text
-[1] video tutorial
-[2] dataset
+[1] Nicholas Renotte (2021): Build a Deep Facial Recognition App from Paper to Code Youtube Tutorial: https://www.youtube.com/watch?v=bK_k7eebGgc&list=PLgNJO2hghbmhHuhURAGbe6KWpiYZt0AMH 
+[2] JUPYTER NOTEBOOKS OF NICHOLAS RENOTTE: https://github.com/nicknochnack/FaceRecognition/tree/main
+[3] DATASET: https://www.kaggle.com/datasets/atulanandjha/lfwpeople
+[4] Koch, Gregory, Richard Zemel, and Ruslan Salakhutdinov (2015): Siamese neural networks for one-shot image: https://www.cs.utoronto.ca/~rsalakhu/papers/oneshot1.pdf
 ```
+ 
