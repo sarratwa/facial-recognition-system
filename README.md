@@ -24,3 +24,61 @@ https://www.tensorflow.org/install/pip
 2. Importing Tensorflow Functional API
 3. Setting up to Limit your GPU growth 
 4. Create Data Folders and Structure
+
+## Installation
+
+### Clone the repository
+
+```bash
+git clone <repository-url>
+cd facial-recognition-system
+```
+
+###  Create the environment from `environment.yml`
+The recommended way to install the project is with Conda using the provided `environment.yml` file. This creates an environment with the required Python, TensorFlow, CUDA, cuDNN, OpenCV, Matplotlib, and Jupyter versions.
+
+```bash
+conda env create -f environment.yml
+conda activate facial-recognition
+```
+
+### Manual installation
+#### Create the Conda environment
+
+```bash
+conda create -n facial-recognition python=3.7 -y
+conda activate facial-recognition
+```
+
+#### Install CUDA dependencies for GPU use
+
+```bash
+conda install -c conda-forge cudatoolkit=11.0 cudnn=8.0 -y
+```
+
+#### Install Python dependencies
+
+```bash
+python -m pip install -r requirements.txt
+```
+
+### Register the Jupyter kernel
+
+```bash
+python -m ipykernel install --user \
+  --name facial-recognition \
+  --display-name "Python 3.7 - Facial Recognition"
+```
+
+### Run the project
+
+```bash
+conda activate facial-recognition
+```
+
+### Start Jupyter Notebook
+
+```bash
+jupyter notebook
+```
+Select the kernel: Python 3.7 - Facial Recognition
