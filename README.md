@@ -41,8 +41,9 @@ The recommended way to install the project is with Conda using the provided `env
 conda env create -f environment.yml
 conda activate facial-recognition
 ```
-
-### Manual installation
+> [!NOTE]
+> ### Or Manual installation
+Use this method only when the environment file cannot be used.
 #### Create the Conda environment
 
 ```bash
