@@ -1,31 +1,64 @@
-# Deep Facial Recognition System
+# Facial Recognition System
 
-The focus of the project was understanding how deep learning techniques can be applied to biometric authentication systems and facial verification tasks.
+This repository contains a facial verification system developed for the **Advanced Topics – Introduction to Biometrics** module at HTW Berlin. The implementation uses a Siamese neural network to compare two face images and estimate whether they belong to the same person.
 
-## Project Pipeline
+The project includes data collection, preprocessing, model construction, training, evaluation, model saving, and real-time verification using OpenCV.
 
-1. Install Dependencies around Tensorflow
+# Table of Contents
+1. [Introduction](#introduction)
+2. [Requirements](#Requirements)
+3. [Data](#Data)
 
-!pip install tensorflow==2.4.1 tensorflow-gpu==2.4.1 opencv-python matplotlib
--> explain why it works on ubuntu / wsl windows
--> another point is tensorflow-gpu failed python_version>"3.7" This error originates from a subprocess, and is likely not a problem with pip. error: metadata-generation-failed
+## 1. Project Purpose  <a name="introduction"></a>
 
-pip install tensorflow-gpu==2.4.1
-ERROR: Could not find a version that satisfies the requirement tensorflow-gpu==2.4.1 (from versions: 2.12.0)
-ERROR: No matching distribution found for tensorflow-gpu==2.4.1
+The aim of this project is to build and evaluate a facial verification system based on a Siamese neural network.
 
-Software requirements
-Python 3.9–3.12
+Unlike a conventional multi-class classifier, the model does not directly predict a person's identity. Instead, it receives two images and learns whether the images represent the same person.
 
-https://www.tensorflow.org/install/pip
+The notebook follows this workflow:
 
--> new one is python3 -m pip install 'tensorflow[and-cuda]'
+1. Configure the Python and TensorFlow environment.
+2. Create anchor, positive, and negative image datasets.
+3. Preprocess images into a consistent format.
+4. Build an embedding network.
+5. Compare image embeddings using an L1 distance layer.
+6. Train the Siamese network using binary cross-entropy.
+7. Evaluate the model using classification metrics.
+8. Save the trained model.
+9. Perform real-time facial verification using a webcam.
 
-2. Importing Tensorflow Functional API
-3. Setting up to Limit your GPU growth 
-4. Create Data Folders and Structure
+## 2. Requirements <a name="Requirements"></a>
 
-## Installation
+The project was developed and tested with the following environment:
+
+- Python 3.7
+- TensorFlow 2.4.1
+- OpenCV
+- NumPy
+- Matplotlib
+- Jupyter Notebook
+- NVIDIA GPU support through WSL2
+- CUDA 11.0
+- cuDNN 8.0
+
+The project can also run on the CPU, although training and inference may be slower.
+
+## 3. Data <a name="Data"></a>
+
+The project uses three image categories:
+
+- **Anchor images:** reference images of the target person.
+- **Positive images:** additional images of the same person.
+- **Negative images:** images of other people.
+
+The negative examples are taken from the [Labeled Faces in the Wild (LFW)](https://www.kaggle.com/datasets/atulanandjha/lfwpeople) dataset.
+
+> [!IMPORTANT]
+> The notebook resizes images to `100 × 100` pixels and scales pixel values to the range `[0, 1]`.
+
+todo: document clearly how an evaluator can provide their own images
+
+## 5. Installation
 
 ### Clone the repository
 
@@ -78,3 +111,34 @@ conda activate facial-recognition
 jupyter notebook
 ```
 Select the kernel: Python 3.7 - Facial Recognition
+
+## 6. Tutorial Credit
+
+This implementation is adapted from the facial recognition tutorial by **Nicholas Renotte**, which demonstrates a Siamese neural network for facial verification using TensorFlow and OpenCV.
+
+The original tutorial structure and core implementation ideas include:
+
+- collecting anchor and positive images with OpenCV;
+- using LFW images as negative examples;
+- creating image pairs with TensorFlow datasets;
+- building a shared embedding network;
+- implementing a custom L1 distance layer;
+- training a Siamese network;
+- evaluating precision and recall;
+- performing real-time verification.
+
+My modifications include:
+
+- adapting the environment for WSL2;
+- creating a reproducible Conda environment;
+- documenting Python, TensorFlow, CUDA, and cuDNN compatibility;
+- adding environment verification;
+- improving notebook organization and explanations;
+- TODO: list all further code, evaluation, robustness, and visualization changes.
+
+## 7. References and Citations
+
+```text
+[1] video tutorial
+[2] dataset
+```
