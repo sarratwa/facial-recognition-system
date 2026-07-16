@@ -6,8 +6,8 @@ The project includes data collection, preprocessing, model construction, trainin
 
 # Table of Contents
 1. [Introduction](#introduction)
-2. [Requirements](#Requirements)
-3. [Data](#Data)
+2. [Requirements](#requirements)
+3. [Data](#data)
 
 ## 1. Project Purpose  <a name="introduction"></a>
 
@@ -27,7 +27,7 @@ The notebook follows this workflow:
 8. Save the trained model.
 9. Perform real-time facial verification using a webcam.
 
-## 2. Requirements <a name="Requirements"></a>
+## 2. Requirements <a name="requirements"></a>
 
 The project was developed and tested with the following environment:
 
@@ -43,7 +43,7 @@ The project was developed and tested with the following environment:
 
 The project can also run on the CPU, although training and inference may be slower.
 
-## 3. Data <a name="Data"></a>
+## 3. Data <a name="data"></a>
 
 The project uses three image categories:
 
