@@ -6,11 +6,11 @@ The project includes data collection, preprocessing, model construction, trainin
 
 # Table of Contents
 1. [Introduction](#introduction)
-2. [Requirements](#Requirements)
-3. [Data](#Data)
-4. [Installation](#Installation)
-5. [Acknowledgement](#Acknowledgement)
-6. [References](#References)
+2. [Requirements](#requirements)
+3. [Data](#data)
+4. [Installation](#installation)
+5. [Acknowledgement](#acknowledgement)
+6. [References](#references)
 
 ## 1. Project Purpose  <a name="introduction"></a>
 
@@ -61,7 +61,7 @@ The negative examples are taken from the [Labeled Faces in the Wild (LFW)](https
 
 todo: document clearly how an evaluator can provide their own images
 
-## 4. Installation <a name="Installation"></a>
+## 4. Installation <a name="installation"></a>
 
 ### Clone the repository
 
@@ -115,7 +115,7 @@ jupyter notebook
 ```
 Select the kernel: Python 3.7 - Facial Recognition
 
-## 5. Acknowledgement <a name="Acknowledgement"></a>
+## 5. Acknowledgement <a name="acknowledgement"></a>
 
 This implementation is adapted from the facial recognition tutorial by **Nicholas Renotte**, which demonstrates a Siamese neural network for facial verification using TensorFlow and OpenCV.
 
@@ -139,7 +139,7 @@ My modifications include:
 - improving notebook organization and explanations;
 - TODO: list all further code, evaluation, robustness, and visualization changes.
 
-## 6. References <a name="References"></a>
+## 6. References <a name="references"></a>
 
 ```text
 [1] video tutorial
