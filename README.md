@@ -56,40 +56,23 @@ The project uses three image categories:
 - **Positive images:** additional images of the same person.
 - **Negative images:** images of other people.
 
-The negative examples are taken from the [Labeled Faces in the Wild (LFW)](https://www.kaggle.com/datasets/atulanandjha/lfwpeople) dataset.
-
 > [!IMPORTANT]
 > The notebook resizes images to `100 × 100` pixels and scales pixel values to the range `[0, 1]`.
 
-todo: document clearly how an evaluator can provide their own images
+Acquiring the negative data was a standard dataset download (Section 3.1). Acquiring the anchor/positive data via webcam was not straightforward, because this project runs inside WSL2, which does not expose USB devices such as webcams to Linux by default. Getting webcam capture working under WSL2 is one of the adaptations this project makes to the original tutorial (see Acknowledgement); the full debugging process is written up separately in [WSL_WEBCAM_SETUP.md](WSL_WEBCAM_SETUP.md) so it doesn't clutter this README, and can be skipped entirely by anyone not running under WSL2.
 
-### Download the LFW Dataset
+### 3.1 Negative Images: Labeled Faces in the Wild (LFW)
 
 1. Go to Kaggle and log in to your account, or create a new account.
-2. Open the **LFW - People (Face Recognition)** dataset page.
+2. Open the [Labeled Faces in the Wild (LFW)](https://www.kaggle.com/datasets/atulanandjha/lfwpeople) dataset page.
 3. Download the `lfw-funneled.tgz` file.
-4. Move the downloaded file into the project’s root directory.
-5. Run the cell below to extract the dataset.
+4. Move the downloaded file in the same folder as the jupyter notebook.
 
----> for taking pics on wsl : 
-Administrator PowerShell:
-wsl --update
-wsl --shutdown  
-winget install --interactive --exact dorssel.usbipd-win
-usbipd list
-usbipd bind --busid 2-4
-Normal powershell:
-usbipd attach --wsl --busid 2-4 (2-4 with your actual webcam bus ID.)
+### 3.2 Anchor & Positive Images: Webcam Capture
 
-check inside wsl:
-sudo apt update
-sudo apt install -y usbutils v4l-utils
-lsusb
-ls -l /dev/video*
+Anchor and positive images are captured live from the notebook using OpenCV (cv2.VideoCapture), with a key-press workflow (a = save anchor frame, p = save positive frame, q = quit).
 
-v4l2-ctl --list-devices
-
-/dev/video0
+On a native Windows or Linux installation this works without any extra setup. Under WSL2, cv2.VideoCapture cannot see the webcam at all until the device is explicitly passed through from Windows and the correct kernel driver is loaded. If you hit this problem, see [WSL_WEBCAM_SETUP.md](WSL_WEBCAM_SETUP.md) for the full passthrough setup, including the two issues encountered while building this project (missing /dev/video* devices, and device permissions that reset on every WSL restart) and how they were resolved.
 
 ## 4. Installation <a name="installation"></a>
 
@@ -107,22 +90,8 @@ The recommended way to install the project is with Conda using the provided `env
 conda env create -f environment.yml
 conda activate facial-recognition
 ```
-> [!NOTE]
-> ### Manual installation
-> Use this method only when the environment file cannot be used.
-> #### Create the Conda environment
-> ```bash
-> conda create -n facial-recognition python=3.7 -y
-> conda activate facial-recognition
-> ```
-> #### Install CUDA dependencies for GPU use
-> ```bash
-> conda install -c conda-forge cudatoolkit=11.0 cudnn=8.0 -y
-> ```
-> #### Install Python dependencies
-> ```bash
-> python -m pip install -r requirements.txt
-> ```
+
+Manual installation see [MANUAL_INSTALLATION.md](MANUAL_INSTALLATION.md)
 
 ### Register the Jupyter kernel
 
@@ -162,15 +131,14 @@ The original tutorial structure and core implementation ideas include:
 
 My modifications include:
 
-- adapting the environment for WSL2;
-- creating a reproducible Conda environment;
+- adapting the environment for WSL2: WSL_WEBCAM_SETUP.md
+- creating a reproducible Conda environment
 - documenting Python, TensorFlow, CUDA, and cuDNN compatibility;
-- adding environment verification;
+- adding environment verification (debugging cells within the notebook)
 - improving notebook organization and explanations;
-- TODO: list all further code, evaluation, robustness, and visualization changes.
 
-problems: 
-- Note: Some environments may display a NUMA-support warning when TensorFlow initializes the GPU. This warning is harmless when tf.config.list_physical_devices("GPU") returns a GPU and training runs successfully.
+Known issues:
+Some environments display a NUMA-support warning when TensorFlow initializes the GPU. This warning is harmless as long as `tf.config.list_physical_devices("GPU")` returns a GPU and training runs successfully.
 
 ## 6. References <a name="references"></a>
 
