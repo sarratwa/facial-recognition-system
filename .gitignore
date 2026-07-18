@@ -30,8 +30,8 @@ Thumbs.db
 *.npz
 
 # Private or local datasets
-data/*
-!data/README.md
+notebooks/**
+!notebooks/**/*.ipynb
 
 # Credentials
 *.key

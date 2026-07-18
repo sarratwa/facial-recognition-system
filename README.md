@@ -63,6 +63,34 @@ The negative examples are taken from the [Labeled Faces in the Wild (LFW)](https
 
 todo: document clearly how an evaluator can provide their own images
 
+### Download the LFW Dataset
+
+1. Go to Kaggle and log in to your account, or create a new account.
+2. Open the **LFW - People (Face Recognition)** dataset page.
+3. Download the `lfw-funneled.tgz` file.
+4. Move the downloaded file into the project’s root directory.
+5. Run the cell below to extract the dataset.
+
+---> for taking pics on wsl : 
+Administrator PowerShell:
+wsl --update
+wsl --shutdown  
+winget install --interactive --exact dorssel.usbipd-win
+usbipd list
+usbipd bind --busid 2-4
+Normal powershell:
+usbipd attach --wsl --busid 2-4 (2-4 with your actual webcam bus ID.)
+
+check inside wsl:
+sudo apt update
+sudo apt install -y usbutils v4l-utils
+lsusb
+ls -l /dev/video*
+
+v4l2-ctl --list-devices
+
+/dev/video0
+
 ## 4. Installation <a name="installation"></a>
 
 ### Clone the repository
