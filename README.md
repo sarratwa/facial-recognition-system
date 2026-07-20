@@ -9,6 +9,7 @@ The project includes data collection, preprocessing, model construction, trainin
 2. [Requirements](#requirements)
 3. [Data](#data)
 4. [Installation](#installation)
+5. [Known Issues & Workarounds](#issues) 
 5. [Acknowledgement](#acknowledgement)
 6. [References](#references)
 
@@ -46,11 +47,6 @@ The project was developed and tested with the following environment:
 
 The project can also run on the CPU, although training and inference may be slower.
 
--> add the env : wsl + gpu details
-
-Known issues:
-
-- Some environments display a NUMA-support warning when TensorFlow initializes the GPU. This warning is harmless as long as `tf.config.list_physical_devices("GPU")` returns a GPU and training runs successfully.
 
 ## 3. Data <a name="data"></a>
 
@@ -70,11 +66,20 @@ The project uses three image categories:
 3. Download the `lfw-funneled.tgz` file.
 4. Move the downloaded file in the same folder as the jupyter notebook.
 
-### 3.2 Anchor & Positive Images: Webcam Capture
+### 3.2 Anchor & Positive Images: Webcam Capture  <a name="imagesissues"></a>
 
-Anchor and positive images are captured live from the notebook using `OpenCV (cv2.VideoCapture)`, with a key-press workflow (a = save anchor frame, p = save positive frame, q = quit).
+Anchor and positive images are captured live from the notebook using `OpenCV (cv2.VideoCapture)`, with a key-press workflow (a = save anchor frame, p = save positive frame, q = quit). On a native Windows or Linux installation this works out of the box.
 
-On a native Windows or Linux installation this works without any extra setup. Under WSL2, cv2.VideoCapture cannot see the webcam at all until the device is explicitly passed through from Windows and the correct kernel driver is loaded. If you hit this problem, see [WSL_WEBCAM_SETUP.md](WSL_WEBCAM_SETUP.md) for the full passthrough setup, including the two issues encountered while building this project (missing /dev/video* devices, and device permissions that reset on every WSL restart) and how they were resolved.
+This project runs inside WSL2, where, even after passing the USB webcam through from Windows (see [WSL_WEBCAM_SETUP.md](WSL_WEBCAM_SETUP.md)), cv2.VideoCapture still failed to reliably open the device for live capture. Rather than spend the project time fighting USB/IP passthrough further, the anchor/positive capture step was moved out of WSL entirely:
+  1. Run `capture_images.py` in a plain Windows Python environment (not WSL). A separate, minimal Python environment on native Windows is needed just for capture_images.py:
+
+  ```bash
+    pip install opencv-python
+  ```
+  2. This opens the webcam natively, applies the same 250×250 crop used elsewhere in the pipeline, and saves images to captured/anchor/ and captured/positive/ on the Windows side.
+  3. Copy the contents of those two folders into the project's data/anchor/ and data/positive/ folders inside WSL.
+
+If you're running this project natively on Windows or Linux (not WSL2), you can ignore this workaround and use the original in-notebook webcam capture cells instead, they are kept in the notebook (commented out) for reference.
 
 ## 4. Installation <a name="installation"></a>
 
@@ -116,7 +121,14 @@ jupyter notebook
 ```
 Select the kernel: Python 3.7 - Facial Recognition
 
-## 5. Acknowledgement <a name="acknowledgement"></a>
+## 5. Known Issues & Workarounds <a name="issues"></a>
+
+- Some environments display a NUMA-support warning when TensorFlow initializes the GPU. This warning is harmless as long as `tf.config.list_physical_devices("GPU")` returns a GPU and training runs successfully.
+- WSL2 has no native USB webcam access. `cv2.VideoCapture` cannot see any camera until it is explicitly passed through from Windows via usbipd-win, and even after passthrough, this project still encountered failures opening the device for a stable live capture session inside WSL2 (`RuntimeError: Could not open /dev/video0`, reproducible in the notebook's own debug cells in Section 2.2). Workaround adopted for this submission: anchor and positive images were captured using `capture_images.py` run natively on Windows, then copied into `data/anchor` `/ data/positive`. See [3.2](#imagesissues)
+- The same limitation applies to the real-time verification step at the end of the notebook (Section 8). If live verification inside WSL is not possible in your environment either, use the same native-Windows approach to capture a single verification frame and load it into the notebook's `verify()` function as a static image instead of a live `cv2.VideoCapture` loop.
+
+
+## 6. Acknowledgement <a name="acknowledgement"></a>
 
 This implementation is adapted from the facial recognition tutorial by **Nicholas Renotte**, which demonstrates a Siamese neural network for facial verification using TensorFlow and OpenCV.
 
@@ -133,13 +145,13 @@ The original tutorial structure and core implementation ideas include:
 
 My modifications include:
 
-- adapting the environment for WSL2: `WSL_WEBCAM_SETUP.md`
+- adapting the environment for WSL2: `WSL_WEBCAM_SETUP.md` & moving anchor/positive image capture to a native-Windows script (`capture_images.py`) due to unresolved WSL2 webcam limitations
 - creating a reproducible Conda environment
 - documenting Python, TensorFlow, CUDA, and cuDNN compatibility
 - adding environment verification (debugging cells within the notebook)
-- improving notebook organization and explanations;
+- improving notebook organization and explanations
 
-## 6. References <a name="references"></a>
+## 7. References <a name="references"></a>
 
 [1] Nicholas Renotte (2021): Build a Deep Facial Recognition App from Paper to Code Youtube Tutorial: https://www.youtube.com/watch?v=bK_k7eebGgc&list=PLgNJO2hghbmhHuhURAGbe6KWpiYZt0AMH <br>
 [2] JUPYTER NOTEBOOKS OF NICHOLAS RENOTTE: https://github.com/nicknochnack/FaceRecognition/tree/main <br>

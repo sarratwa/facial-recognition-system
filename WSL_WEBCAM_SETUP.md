@@ -1,4 +1,4 @@
-### WSL2 Webcam Passthrough Setup (Troubleshooting Guide)
+### WSL2 Webcam Passthrough Setup (Troubleshooting)
 The original tutorial this project is based on assumes the webcam is directly available to OpenCV (cv2.VideoCapture(0)), which is true on native Windows or native Linux. This project instead runs inside WSL2, which by default has no access to USB devices such as webcams. There is nothing to fix in Python or OpenCV here, the device simply isn't visible to the Linux side at all until it's explicitly passed through from Windows.
 
 This document exists so that anyone else re-running this project under WSL2 doesn't have to rediscover this from scratch. If you're running natively on Windows or Linux (not WSL2), you can skip this file entirely.
