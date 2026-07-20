@@ -10,10 +10,12 @@ The project includes data collection, preprocessing, model construction, trainin
 3. [Data](#data)
 4. [Installation](#installation)
 5. [Known Issues & Workarounds](#issues) 
-5. [Acknowledgement](#acknowledgement)
-6. [References](#references)
+6. [Acknowledgement](#acknowledgement)
+7. [References](#references)
 
-## 1. Project Purpose  <a name="introduction"></a>
+## 1. Introduction  <a name="introduction"></a>
+
+### 1.1 Project Purpose 
 
 The aim of this project is to build and evaluate a facial verification system based on a Siamese neural network.
 
@@ -31,6 +33,13 @@ The notebook follows this workflow:
 8. Save the trained model.
 9. Perform real-time facial verification using a webcam.
 
+### 1.2 Theoretical Background
+Siamese networks address verification as a similarity learning problem rather than a classification problem. Two identical (weight-sharing) embedding networks map each input image into a fixed-length feature vector; the L1 distance between the two vectors is then passed through a single dense layer with a sigmoid activation to produce a same/different probability. Because the network learns a general notion of similarity rather than fixed per-person classes, it generalizes to identities never seen during training, a person can be verified from as little as one reference (anchor) image, which is why this approach is described as one-shot learning.
+
+Training relies on triplets of images: an anchor, a positive (same identity as the anchor), and a negative (different identity). The network is trained with binary cross-entropy over anchor–positive and anchor–negative pairs, pushing embeddings of the same identity closer together and embeddings of different identities further apart.
+
+This project's architecture and training procedure follow Koch, Zemel, and Salakhutdinov (2015) [4], which introduced this convolutional Siamese approach for one-shot image recognition.
+
 ## 2. Requirements <a name="requirements"></a>
 
 The project was developed and tested with the following environment:
@@ -47,6 +56,14 @@ The project was developed and tested with the following environment:
 
 The project can also run on the CPU, although training and inference may be slower.
 
+### 2.1 Development Environment
+This project was developed and tested on the following setup:
+| Component | Specification | 
+|---|---| 
+| Host OS | Windows 11 with WSL2 | 
+| WSL2 distribution | Ubuntu 22.04 | 
+| GPU | NVIDIA GeForce RTX 3050 Laptop GPU, 4 GB VRAM | 
+| CPU | Intel Core i7-10870H, 2.20 GHz | 
 
 ## 3. Data <a name="data"></a>
 
@@ -71,7 +88,7 @@ The project uses three image categories:
 Anchor and positive images are captured live from the notebook using `OpenCV (cv2.VideoCapture)`, with a key-press workflow (a = save anchor frame, p = save positive frame, q = quit). On a native Windows or Linux installation this works out of the box.
 
 This project runs inside WSL2, where, even after passing the USB webcam through from Windows (see [WSL_WEBCAM_SETUP.md](WSL_WEBCAM_SETUP.md)), cv2.VideoCapture still failed to reliably open the device for live capture. Rather than spend the project time fighting USB/IP passthrough further, the anchor/positive capture step was moved out of WSL entirely:
-  1. Run `capture_images.py` in a plain Windows Python environment (not WSL). A separate, minimal Python environment on native Windows is needed just for capture_images.py:
+  1. Run [capture_images.py](scripts/capture_images.py) in a plain Windows Python environment (not WSL). A separate, minimal Python environment on native Windows is needed:
 
   ```bash
     pip install opencv-python
@@ -124,7 +141,7 @@ Select the kernel: Python 3.7 - Facial Recognition
 ## 5. Known Issues & Workarounds <a name="issues"></a>
 
 - Some environments display a NUMA-support warning when TensorFlow initializes the GPU. This warning is harmless as long as `tf.config.list_physical_devices("GPU")` returns a GPU and training runs successfully.
-- WSL2 has no native USB webcam access. `cv2.VideoCapture` cannot see any camera until it is explicitly passed through from Windows via usbipd-win, and even after passthrough, this project still encountered failures opening the device for a stable live capture session inside WSL2 (`RuntimeError: Could not open /dev/video0`, reproducible in the notebook's own debug cells in Section 2.2). Workaround adopted for this submission: anchor and positive images were captured using `capture_images.py` run natively on Windows, then copied into `data/anchor` `/ data/positive`. See [3.2](#imagesissues)
+- WSL2 has no native USB webcam access. `cv2.VideoCapture` cannot see any camera until it is explicitly passed through from Windows via usbipd-win, and even after passthrough, this project still encountered failures opening the device for a stable live capture session inside WSL2 (`RuntimeError: Could not open /dev/video0`, reproducible in the notebook's own debug cells in Section 2.2). Workaround adopted for this submission: anchor and positive images were captured using [capture_images.py](scripts/capture_images.py) run natively on Windows, then copied into `data/anchor` `/ data/positive`. See [3.2](#imagesissues)
 - The same limitation applies to the real-time verification step at the end of the notebook (Section 8). If live verification inside WSL is not possible in your environment either, use the same native-Windows approach to capture a single verification frame and load it into the notebook's `verify()` function as a static image instead of a live `cv2.VideoCapture` loop.
 
 
