@@ -98,6 +98,15 @@ This project runs inside WSL2, where, even after passing the USB webcam through 
 
 If you're running this project natively on Windows or Linux (not WSL2), you can ignore this workaround and use the original in-notebook webcam capture cells instead, they are kept in the notebook (commented out) for reference.
 
+### 3.3 Final Dataset Size
+
+After running the capture and folder-check steps described above, the final counts used for this submission were:
+
+- Anchor images: 443
+- Positive images: 458
+
+This falls within the recommended range for this Siamese network setup (roughly 250–400+ per category), giving the model enough variety to learn a stable similarity metric.
+
 ## 4. Installation <a name="installation"></a>
 
 ### 4.1 Clone the repository
