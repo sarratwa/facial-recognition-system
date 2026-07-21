@@ -17,6 +17,7 @@ Usage (in a plain Windows PowerShell / cmd prompt, NOT WSL):
 Controls while the preview window is open:
     a  -> save current frame as an ANCHOR image
     p  -> save current frame as a POSITIVE image
+    i  -> save current frame as the single verification INPUT image
     q  -> quit
 
 Output:
@@ -39,6 +40,7 @@ import cv2
 
 ANCHOR_DIR = os.path.join("captured", "anchor")
 POSITIVE_DIR = os.path.join("captured", "positive")
+INPUT_IMAGE_DIR = os.path.join("captured", "input_image")
 
 CROP_Y, CROP_X, CROP_SIZE = 120, 200, 250  # matches the crop used in the main notebook
 
@@ -47,6 +49,7 @@ def ensure_dirs():
     try:
         os.makedirs(ANCHOR_DIR, exist_ok=True)
         os.makedirs(POSITIVE_DIR, exist_ok=True)
+        os.makedirs(INPUT_IMAGE_DIR, exist_ok=True)
     except OSError as error:
         raise RuntimeError(f"Could not create output folders: {error}") from error
 
@@ -62,7 +65,7 @@ def main():
             "that Windows camera privacy settings allow desktop apps access."
         )
 
-    print("Webcam opened. Press 'a' for anchor, 'p' for positive, 'q' to quit.")
+    print("Webcam opened. Press 'a' for anchor, 'p' for positive, 'i' for singular input image,  'q' to quit.")
 
     try:
         while cap.isOpened():
@@ -90,6 +93,13 @@ def main():
                     print(f"Warning: failed to write {path}")
                 else:
                     print(f"Saved positive: {path}")
+            
+            elif key == ord("i"):
+                path = os.path.join(INPUT_IMAGE_DIR, "input_image.jpg")
+                if not cv2.imwrite(path, cropped):
+                    print(f"Warning: failed to write {path}")
+                else:
+                    print(f"Saved verification frame: {path} (overwrites previous)")
 
             elif key == ord("q"):
                 break

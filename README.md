@@ -9,9 +9,10 @@ The project includes data collection, preprocessing, model construction, trainin
 2. [Requirements](#requirements)
 3. [Data](#data)
 4. [Installation](#installation)
-5. [Known Issues & Workarounds](#issues) 
-6. [Acknowledgement](#acknowledgement)
-7. [References](#references)
+5. [Results](#results) 
+6. [Known Issues & Workarounds](#issues) 
+7. [Acknowledgement](#acknowledgement)
+8. [References](#references)
 
 ## 1. Introduction  <a name="introduction"></a>
 
@@ -100,6 +101,9 @@ If you're running this project natively on Windows or Linux (not WSL2), you can 
 
 ### 3.3 Final Dataset Size
 
+The anchor/positive images used for this submission are not included in this repository for privacy reasons.
+To reproduce this project with your own data, follow the capture workflow in Section 3.2 to populate `data/anchor` and `data/positive` yourself.
+
 After running the capture and folder-check steps described above, the final counts used for this submission were:
 
 - Anchor images: 443
@@ -147,14 +151,30 @@ jupyter notebook
 ```
 Select the kernel: Python 3.7 - Facial Recognition
 
-## 5. Known Issues & Workarounds <a name="issues"></a>
+### 4.6 Usage
+
+1. Run the notebook top to bottom (Sections 1–7) to train and save the model, or skip training by loading the saved `siamesemodelv2.h5` if available (see Section 7).
+2. Populate `application_data/verification_images/` with a few reference photos of the enrolled person.
+3. Capture (or copy) a test photo as `application_data/input_image/input_image.jpg`.
+4. Run `verify(siamese_model, 0.5, 0.5)` (Section 8.1) to check whether the test photo matches the enrolled person.
+
+## 5. Results <a name="results"></a>
+
+- adapting the environment for WSL2: `WSL_WEBCAM_SETUP.md` & moving anchor/positive image capture to a native-Windows script (`capture_images.py`) due to unresolved WSL2 webcam limitations
+- Training time: ~4.5 minutes for 50 epochs (model converged by ~epoch 5)
+- Precision / Recall on held-out test set: 1.0 / 1.0
+- See Section 9 of the notebook for genuine-match and impostor-rejection verification tests.
+
+## 6. Known Issues & Workarounds <a name="issues"></a>
 
 - Some environments display a NUMA-support warning when TensorFlow initializes the GPU. This warning is harmless as long as `tf.config.list_physical_devices("GPU")` returns a GPU and training runs successfully.
 - WSL2 has no native USB webcam access. `cv2.VideoCapture` cannot see any camera until it is explicitly passed through from Windows via usbipd-win, and even after passthrough, this project still encountered failures opening the device for a stable live capture session inside WSL2 (`RuntimeError: Could not open /dev/video0`, reproducible in the notebook's own debug cells in Section 2.2). Workaround adopted for this submission: anchor and positive images were captured using [capture_images.py](scripts/capture_images.py) run natively on Windows, then copied into `data/anchor` `/ data/positive`. See [3.2](#imagesissues)
 - The same limitation applies to the real-time verification step at the end of the notebook (Section 8). If live verification inside WSL is not possible in your environment either, use the same native-Windows approach to capture a single verification frame and load it into the notebook's `verify()` function as a static image instead of a live `cv2.VideoCapture` loop.
+- **Single-identity verification**: like the original tutorial, this implementation verifies against one enrolled person. Supporting multiple enrolled identities would require separate positive-image folders per subject and an updated labeling scheme, rather than the current single anchor/positive structure.
+- **Enhanced performance measurement**: this implementation reports precision and recall on the held-out test set (Section 6), but does not compute FNMR/FMR, a DET curve, or a genuine/impostor score histogram. This would be a natural next step for a deeper evaluation.
 
 
-## 6. Acknowledgement <a name="acknowledgement"></a>
+## 7. Acknowledgement <a name="acknowledgement"></a>
 
 This implementation is adapted from the facial recognition tutorial by **Nicholas Renotte**, which demonstrates a Siamese neural network for facial verification using TensorFlow and OpenCV.
 
@@ -169,15 +189,7 @@ The original tutorial structure and core implementation ideas include:
 - evaluating precision and recall
 - performing real-time verification
 
-My modifications include:
-
-- adapting the environment for WSL2: `WSL_WEBCAM_SETUP.md` & moving anchor/positive image capture to a native-Windows script (`capture_images.py`) due to unresolved WSL2 webcam limitations
-- creating a reproducible Conda environment
-- documenting Python, TensorFlow, CUDA, and cuDNN compatibility
-- adding environment verification (debugging cells within the notebook)
-- improving notebook organization and explanations
-
-## 7. References <a name="references"></a>
+## 8. References <a name="references"></a>
 
 [1] Nicholas Renotte (2021): Build a Deep Facial Recognition App from Paper to Code Youtube Tutorial: https://www.youtube.com/watch?v=bK_k7eebGgc&list=PLgNJO2hghbmhHuhURAGbe6KWpiYZt0AMH <br>
 [2] JUPYTER NOTEBOOKS OF NICHOLAS RENOTTE: https://github.com/nicknochnack/FaceRecognition/tree/main <br>
