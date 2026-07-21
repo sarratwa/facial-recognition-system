@@ -201,10 +201,7 @@ The original tutorial structure and core implementation ideas include:
 - evaluating precision and recall
 - performing real-time verification
 
-## 7. My Modifications
-
-Compared to Nicholas Renotte's original tutorial implementation, this
-project includes the following changes:
+My Modifications: Compared to Nicholas Renotte's original tutorial implementation, this project includes the following changes:
 
 - **Environment adaptation for WSL2**: documented in `WSL_WEBCAM_SETUP.md`; anchor/positive image capture moved to a native-Windows script
   (`capture_images.py`) since `cv2.VideoCapture` could not reliably open the webcam inside WSL2 even after USB passthrough
@@ -212,7 +209,7 @@ project includes the following changes:
 - **Proper exception handling on file I/O**, added after encountering a real crash during development: folder-existence checks before loading anchor/positive images `verify()` (Section 8.1)
 - **Enhanced performance evaluation** (Section 6.5): genuine/impostor score histogram, FNMR/FMR curve across decision thresholds, and an approximate Equal Error Rate calculation, going beyond the basic precision/recall the original tutorial reports
 - **Final end-to-end verification tests** (Section 9): a genuine-match test against the enrolled identity and an impostor-rejection test against a randomly sampled LFW negative image, demonstrating the trained model works as an actual verification system rather than only reporting aggregate metrics
-- added a disguise/obfuscation test (Section 9.2) using a wig and sunglasses, going beyond a simple genuine/impostor comparison to test robustness under partial facial occlusion
+- Added a disguise/obfuscation test (Section 9.2) using a wig and sunglasses, going beyond a simple genuine/impostor comparison to test robustness under partial facial occlusion
 
 ## 8. References <a name="references"></a>
 
