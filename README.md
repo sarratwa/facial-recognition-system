@@ -174,6 +174,7 @@ Select the kernel: Python 3.7 - Facial Recognition
 - Training time: ~4.5 minutes for 50 epochs (model converged by ~epoch 5)
 - Precision / Recall on held-out test set: 1.0 / 1.0
 - See Section 9 of the notebook for genuine-match and impostor-rejection verification tests.
+- Enhanced evaluation (Section 6.5 of the notebook): genuine and impostor similarity scores show complete separation on the held-out test set (genuine scores clustered near 1.0, impostor scores clustered near 0.0), giving a near-zero Equal Error Rate. This is consistent with the 1.0/1.0 precision/recall above (training loss and validation loss are also consistent with each other, not diverging which means this is not overfitting). However, it reflects a relatively easy verification task (one identity vs. a broad pool of visually distinct LFW strangers) rather than a stress test against harder, more similar-looking impostors (see Section 6.5 in the notebook).
 
 ## 6. Known Issues & Workarounds <a name="issues"></a>
 
@@ -199,6 +200,18 @@ The original tutorial structure and core implementation ideas include:
 - training a Siamese network
 - evaluating precision and recall
 - performing real-time verification
+
+## 7. My Modifications
+
+Compared to Nicholas Renotte's original tutorial implementation, this
+project includes the following changes:
+
+- **Environment adaptation for WSL2**: documented in `WSL_WEBCAM_SETUP.md`; anchor/positive image capture moved to a native-Windows script
+  (`capture_images.py`) since `cv2.VideoCapture` could not reliably open the webcam inside WSL2 even after USB passthrough
+- **Reproducible Conda environment** (`environment.yml`) with pinned Python, TensorFlow, CUDA, and cuDNN versions, plus a `requirements.txt` for pip
+- **Proper exception handling on file I/O**, added after encountering a real crash during development: folder-existence checks before loading anchor/positive images `verify()` (Section 8.1)
+- **Enhanced performance evaluation** (Section 6.5): genuine/impostor score histogram, FNMR/FMR curve across decision thresholds, and an approximate Equal Error Rate calculation, going beyond the basic precision/recall the original tutorial reports
+- **Final end-to-end verification tests** (Section 9): a genuine-match test against the enrolled identity and an impostor-rejection test against a randomly sampled LFW negative image, demonstrating the trained model works as an actual verification system rather than only reporting aggregate metrics
 
 ## 8. References <a name="references"></a>
 
